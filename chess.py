@@ -151,6 +151,10 @@ class Chess:
         print("=== JEU D'ÉCHECS ===\n")
         self.initPlayers()
 
+        # Proposer de charger une partie sauvegardée
+        if input("Charger une partie sauvegardée ? (o/n) : ").strip().lower() == 'o':
+            self.loadGame()
+
         while not self.isCheckMate():
             self.displayBoard()
             print(f"Tour de : {self.currentPlayer.name} ({'Blanc' if self.currentPlayer.color == 0 else 'Noir'})")
@@ -193,3 +197,34 @@ class Chess:
 
 if __name__ == "__main__":
     Chess().play()
+
+    def loadGame(self, filename: str = "sauvegarde.json"):
+        """Restaure une partie depuis un fichier JSON."""
+        try:
+            with open(filename, 'r') as f:
+                data = json.load(f)
+
+            # Vider le plateau
+            self.board.pieces = {}
+
+            # Reconstruire les pièces
+            piece_classes = {'P': Pawn, 'R': Rook, 'B': Bishop}
+            for pos_str, info in data["pieces"].items():
+                col = pos_str[0]
+                row = int(pos_str[1])
+                pos = Position(col, row)
+                cls = piece_classes.get(info["type"])
+                if cls:
+                    piece = cls(pos, info["color"])
+                    if info["type"] == 'P':
+                        piece.has_moved = info["has_moved"]
+                    self.board.pieces[pos_str] = piece
+
+            # Restaurer le joueur courant
+            self.currentPlayer = self.players[info["color"]]
+            print(f"Partie restaurée depuis '{filename}'.")
+
+        except FileNotFoundError:
+            print(f"Fichier '{filename}' introuvable.")
+        except Exception as e:
+            print(f"Erreur lors du chargement : {e}")
