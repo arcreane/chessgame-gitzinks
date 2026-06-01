@@ -31,18 +31,3 @@ class Bishop(Piece):
         if target is not None and target.color == self.color:
             return False
         return True
-
-# Tests de validation
-if __name__ == "__main__":
-    pos_dep = Position("e", 4)
-    mon_fou = Bishop(pos_dep, 0)
-    print("--- Test du Fou (Code Final) ---")
-
-    # Test 1 : Diagonale haut-gauche
-    print(f"Test 1 (Valide) -> {mon_fou.isValidMove(Position('c', 6), None)}")
-
-    # Test 2 : Diagonale bas-droite
-    print(f"Test 2 (Valide) -> {mon_fou.isValidMove(Position('g', 2), None)}")
-
-    # Test 3 : Pas une diagonale
-    print(f"Test 3 (Invalide) -> {mon_fou.isValidMove(Position('e', 6), None)}")
