@@ -1,3 +1,4 @@
+# rook.py
 from piece import Piece
 
 
@@ -32,9 +33,19 @@ class Rook(Piece):
                 if board.getPiece(Position(cols[c], self.position.row)) is not None:
                     return False
 
-        # Pas capture d'allié
+        # Pas  capture d'allié
         target = board.getPiece(newPosition)
         if target is not None and target.color == self.color:
             return False
 
         return True
+
+
+if __name__ == "__main__":
+    from position import Position
+    from board import Board
+    b = Board()
+    rook = b.getPiece(Position('a', 1))
+    print(f"Tour en a1 : {rook}")
+    print(f"a1->a3 valide ? {rook.isValidMove(Position('a', 3), b)}")  # False (pion bloque)
+    print("Tests Rook OK !")
