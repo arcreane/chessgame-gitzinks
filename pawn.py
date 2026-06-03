@@ -6,6 +6,10 @@ class Pawn(Piece):
     """Pion : avance d'une case, deux au premier coup, capture en diagonale."""
 
     def __init__(self, color: int, position):
+        """
+        :param color: 0 = blanc, 1 = noir
+        :param position: objet Position
+        """
         super().__init__(color, position)
         self.has_moved = False  # True après le premier déplacement
 
@@ -49,3 +53,15 @@ class Pawn(Piece):
                 return True
 
         return False
+
+
+if __name__ == "__main__":
+    from position import Position
+    from board import Board
+    b = Board()
+    pawn = b.getPiece(Position('e', 2))
+    print(f"Pion en e2 : {pawn}")
+    print(f"e2->e3 valide ? {pawn.isValidMove(Position('e', 3), b)}")   # True
+    print(f"e2->e4 valide ? {pawn.isValidMove(Position('e', 4), b)}")   # True
+    print(f"e2->e5 invalide ? {pawn.isValidMove(Position('e', 5), b)}") # False
+    print("Tests Pawn OK !")
