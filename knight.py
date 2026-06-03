@@ -24,3 +24,14 @@ class Knight(Piece):
             return False
 
         return True
+
+
+if __name__ == "__main__":
+    from position import Position
+    from board import Board
+    b = Board()
+    knight = b.getPiece(Position('b', 1))
+    print(f"Cavalier en b1 : {knight}")
+    print(f"b1->c3 valide ? {knight.isValidMove(Position('c', 3), b)}")   # True
+    print(f"b1->b3 invalide ? {knight.isValidMove(Position('b', 3), b)}") # False
+    print("Tests Knight OK !")
