@@ -6,8 +6,9 @@ class Player:
         self.color = color
 
     def askMove(self) -> str:
-        """Demande au joueur de saisir son prochain coup[cite: 199]."""
-        return "e2 e4"
+        """Demande au joueur de saisir son coup. Format : 'Pe2 e4'"""
+        coup = input(f"{self.name} ({'Blanc' if self.color == 0 else 'Noir'}), votre coup (ex: Pe2 e4) : ")
+        return coup.strip()
 
 
 class AIPlayer(Player):
@@ -26,12 +27,3 @@ if __name__ == "__main__":
     print(f"Coup de l'IA : {ia.askMove()}")
     print("Tests Player OK!")
 
-
-class Knight(Piece):
-    """Classe représentant le Cavalier[cite: 168]."""
-
-    def isValidMove(self, newPosition: Position, board) -> bool:
-        return True
-
-    def __str__(self):
-        return "N"
