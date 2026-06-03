@@ -17,3 +17,10 @@ class Queen(Piece):
         fake_bishop = Bishop(self.color, self.position)
         return (fake_rook.isValidMove(newPosition, board)
                 or fake_bishop.isValidMove(newPosition, board))
+
+
+if __name__ == "__main__":
+    from position import Position
+    from board import Board
+    b = Board()
+    print("Tests Queen OK !")
