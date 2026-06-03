@@ -3,7 +3,7 @@ from piece import Piece
 
 
 class Bishop(Piece):
-    """Fou : se déplace en diagonale."""
+    """Fou : se déplace en diagonale sur n'importe quelle distance."""
 
     def __str__(self):
         return 'B'
@@ -21,7 +21,7 @@ class Bishop(Piece):
         if abs(c2 - c1) != abs(r2 - r1):
             return False
 
-        # Chemin libre
+        # Vérifier que le chemin est libre
         dc = 1 if c2 > c1 else -1
         dr = 1 if r2 > r1 else -1
         c, r = c1 + dc, r1 + dr
@@ -37,3 +37,10 @@ class Bishop(Piece):
             return False
 
         return True
+
+
+if __name__ == "__main__":
+    from position import Position
+    from board import Board
+    b = Board()
+    print("Tests Bishop OK !")
