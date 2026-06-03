@@ -24,3 +24,12 @@ class King(Piece):
             return False
 
         return True
+
+
+if __name__ == "__main__":
+    from position import Position
+    from board import Board
+    b = Board()
+    king = b.getPiece(Position('e', 1))
+    print(f"Roi en e1 : {king}")
+    print("Tests King OK !")
