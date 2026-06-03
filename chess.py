@@ -15,18 +15,24 @@ class Player:
     """Joueur humain."""
 
     def __init__(self, name: str, color: int):
+        """
+        :param name: nom du joueur
+        :param color: 0 = blanc, 1 = noir
+        """
         self.name = name
         self.color = color
 
     def askMove(self) -> str:
+        """Demande au joueur de saisir son coup. Format : 'Pe2 e4'"""
         coup = input(f"{self.name} ({'Blanc' if self.color == 0 else 'Noir'}), entrez votre coup (ex: Pe2 e4) : ")
         return coup.strip()
 
 
 class AIPlayer(Player):
-    """Joueur IA."""
+    """Joueur IA — le coup est calculé dans Chess._getAIMove()."""
 
     def askMove(self) -> str:
+        """Retourne une string vide, le coup est généré par Chess."""
         return ""
 
 
@@ -34,11 +40,12 @@ class Chess:
     """Moteur principal du jeu d'échecs."""
 
     def __init__(self):
-        self.board = Board()
-        self.players = []
-        self.currentPlayer = None
+        self.board = Board()          # Le plateau avec toutes les pièces
+        self.players = []             # Liste des 2 joueurs
+        self.currentPlayer = None     # Joueur qui a la main
 
     def initPlayers(self):
+        """Crée les deux joueurs. Instancie AIPlayer si le nom saisi est 'AI'."""
         self.players = []
         for color, label in [(0, 'Blanc'), (1, 'Noir')]:
             nom = input(f"Nom du joueur {label} (ou 'AI') : ").strip()
@@ -46,9 +53,10 @@ class Chess:
                 self.players.append(AIPlayer(nom, color))
             else:
                 self.players.append(Player(nom, color))
-        self.currentPlayer = self.players[0]
+        self.currentPlayer = self.players[0]  # Les blancs commencent
 
     def displayBoard(self):
+        """Affiche le plateau 8x8 en mode texte. Majuscules=blancs, minuscules=noirs."""
         print("\n    a   b   c   d   e   f   g   h")
         print("  +---+---+---+---+---+---+---+---+")
         for row in range(8, 0, -1):
@@ -66,6 +74,10 @@ class Chess:
         print()
 
     def isValidMove(self, move: str) -> bool:
+        """
+        Vérifie si la string move correspond à un coup légal.
+        Format attendu : 'Pe2 e4' (type + case départ + espace + case arrivée)
+        """
         try:
             pos_dep  = Position(move[1], int(move[2]))
             pos_dest = Position(move[4], int(move[5]))
@@ -85,6 +97,7 @@ class Chess:
             return False
 
     def updateBoard(self, move: str):
+        """Déplace la pièce sur le plateau selon la string move."""
         pos_dep  = Position(move[1], int(move[2]))
         pos_dest = Position(move[4], int(move[5]))
         piece    = self.board.getPiece(pos_dep)
@@ -95,16 +108,18 @@ class Chess:
         self.board.pieces[str(pos_dest)] = piece
 
     def isCheckMate(self) -> bool:
-        # TODO : implémenter la vraie détection
+        """Détecte l'échec et mat. TODO : implémenter la vraie détection."""
         return False
 
     def switchPlayer(self):
+        """Passe la main à l'autre joueur."""
         self.currentPlayer = (
             self.players[1] if self.currentPlayer == self.players[0]
             else self.players[0]
         )
 
     def saveGame(self, filename: str = "sauvegarde.json"):
+        """Sauvegarde l'état complet de la partie dans un fichier JSON."""
         data = {
             "currentPlayer": self.currentPlayer.color,
             "pieces": {
@@ -117,6 +132,7 @@ class Chess:
         print(f"Partie sauvegardée dans '{filename}'.")
 
     def loadGame(self, filename: str = "sauvegarde.json"):
+        """Restaure une partie depuis un fichier JSON."""
         piece_classes = {'P': Pawn, 'R': Rook, 'B': Bishop, 'N': Knight, 'Q': Queen, 'K': King}
         try:
             with open(filename, 'r') as f:
@@ -143,6 +159,7 @@ class Chess:
             print(f"Erreur lors du chargement : {e}")
 
     def _getAIMove(self) -> str:
+        """Génère un coup aléatoire valide pour l'IA."""
         cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
         pieces_ia = [p for p in self.board.pieces.values()
                      if p.color == self.currentPlayer.color]
@@ -156,6 +173,7 @@ class Chess:
         return ""
 
     def play(self):
+        """Boucle principale de la partie d'échecs."""
         print("=== JEU D'ÉCHECS ===\n")
         self.initPlayers()
         if input("Charger une partie sauvegardée ? (o/n) : ").strip().lower() == 'o':
