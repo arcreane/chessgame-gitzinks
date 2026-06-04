@@ -26,7 +26,9 @@ class GameGUI:
         self.pos_selectionnee = None
         self.tour_joueur = 0
         self.joue_contre_ia = False
-
+        from timer import ChessTimer
+        self.chess_timer = ChessTimer()
+        self.chess_timer.start(0)
         self.images = {}
         pieces = ['P', 'R', 'N', 'B', 'Q', 'K']
         couleurs = {0: 'w', 1: 'b'}
@@ -193,6 +195,7 @@ class GameGUI:
                             piece = self.board.getPiece(self.pos_selectionnee)
                             if piece and piece.isValidMove(pos_clic, self.board):
                                 self.board.movePiece(self.pos_selectionnee, pos_clic)
+                                self.chess_timer.switch(self.tour_joueur)
                                 if str(piece) == 'P':
                                     piece.has_moved = True
                                 self.tour_joueur = 1 - self.tour_joueur
@@ -212,8 +215,18 @@ class GameGUI:
 
             self.dessiner_plateau()
             self.dessiner_pieces()
+            font_timer = pygame.font.SysFont("arial", 22, bold=True)
+            surf_b = font_timer.render(f"Blancs : {self.chess_timer.elapsed(0)}", True, (0, 0, 0))
+            surf_n = font_timer.render(f"Noirs  : {self.chess_timer.elapsed(1)}", True, (0, 0, 0))
+            bg_b = pygame.Surface((surf_b.get_width() + 10, surf_b.get_height() + 6))
+            bg_n = pygame.Surface((surf_n.get_width() + 10, surf_n.get_height() + 6))
+            bg_b.fill((255, 255, 255))
+            bg_n.fill((255, 255, 255))
+            self.ecran.blit(bg_b, (4, 4))
+            self.ecran.blit(bg_n, (self.largeur - surf_n.get_width() - 14, 4))
+            self.ecran.blit(surf_b, (9, 7))
+            self.ecran.blit(surf_n, (self.largeur - surf_n.get_width() - 9, 7))
             pygame.display.flip()
-
 
 if __name__ == "__main__":
     jeu = GameGUI()
