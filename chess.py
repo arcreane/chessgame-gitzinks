@@ -93,7 +93,11 @@ class GameGUI:
                     sligne = 8 - self.pos_selectionnee.row
                     if scol == col and sligne == ligne:
                         pygame.draw.rect(self.ecran, (255, 255, 50), rect, 5)
-
+            if self.pos_selectionnee:
+                from move_hints import draw_hints
+                piece = self.board.getPiece(self.pos_selectionnee)
+                if piece:
+                    draw_hints(self.ecran, piece, self.board, self.taille_case)
     def dessiner_pieces(self):
         cols = "abcdefgh"
         for ligne in range(8):
