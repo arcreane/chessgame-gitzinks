@@ -192,6 +192,14 @@ class GameGUI:
                                 if str(piece) == 'P':
                                     piece.has_moved = True
                                 self.tour_joueur = 1 - self.tour_joueur
+                                from king import King
+                                from end_screen import show_end_screen
+                                kings = [p for p in self.board.grid.values() if isinstance(p, King)]
+                                if len(kings) < 2:
+                                    show_end_screen(self.ecran, self.largeur, self.hauteur, kings[0].color)
+                                    self.__init__()
+                                    self.choisir_mode_jeu()
+                                    return
                             self.pos_selectionnee = None
                         else:
                             piece = self.board.getPiece(pos_clic)
