@@ -102,6 +102,13 @@ class GameGUI:
                 piece = self.board.getPiece(self.pos_selectionnee)
                 if piece:
                     draw_hints(self.ecran, piece, self.board, self.taille_case)
+                    font_coords = pygame.font.SysFont("arial", 12, bold=True)
+                    cols_labels = "abcdefgh"
+                    for i in range(8):
+                        lbl = font_coords.render(cols_labels[i], True, (100, 100, 100))
+                        self.ecran.blit(lbl, (i * self.taille_case + self.taille_case - 14, self.hauteur - 15))
+                        lbl2 = font_coords.render(str(8 - i), True, (100, 100, 100))
+                        self.ecran.blit(lbl2, (3, i * self.taille_case + 3))
     def dessiner_pieces(self):
         cols = "abcdefgh"
         for ligne in range(8):
