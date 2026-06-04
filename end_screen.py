@@ -9,7 +9,7 @@ def show_end_screen(screen, width, height, winner_color: int):
     Affiche un écran de victoire.
     :param winner_color: 0 = Blancs gagnent, 1 = Noirs gagnent
     """
-    winner = "Blancs"      if winner_color == 0 else "Noirs"
+    winner = "Blancs"    if winner_color == 0 else "Noirs"
     font_big = pygame.font.SysFont("arial", 64, bold=True)
     font_small = pygame.font.SysFont("arial", 32)
 
