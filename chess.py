@@ -30,6 +30,8 @@ class GameGUI:
         self.chess_timer = ChessTimer()
         self.chess_timer.start(0)
         self.images = {}
+        from sound_manager import SoundManager
+        self.sound = SoundManager()
         pieces = ['P', 'R', 'N', 'B', 'Q', 'K']
         couleurs = {0: 'w', 1: 'b'}
 
@@ -194,7 +196,12 @@ class GameGUI:
                         if self.pos_selectionnee:
                             piece = self.board.getPiece(self.pos_selectionnee)
                             if piece and piece.isValidMove(pos_clic, self.board):
+                                had_piece = self.board.getPiece(pos_clic) is not None
                                 self.board.movePiece(self.pos_selectionnee, pos_clic)
+                                if had_piece:
+                                    self.sound.play_capture()
+                                else:
+                                    self.sound.play_move()
                                 self.chess_timer.switch(self.tour_joueur)
                                 if str(piece) == 'P':
                                     piece.has_moved = True
