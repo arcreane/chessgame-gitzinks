@@ -234,6 +234,8 @@ class GameGUI:
             self.ecran.blit(surf_b, (9, 7))
             self.ecran.blit(surf_n, (self.largeur - surf_n.get_width() - 9, 7))
             pygame.display.flip()
+            joueur_nom = "Blancs" if self.tour_joueur == 0 else "Noirs"
+            pygame.display.set_caption(f"Jeu d'Échecs — Tour des {joueur_nom}")
 
 if __name__ == "__main__":
     jeu = GameGUI()
