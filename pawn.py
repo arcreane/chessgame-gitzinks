@@ -1,48 +1,67 @@
+# pawn.py
 from piece import Piece
-from position import Position
 
 
 class Pawn(Piece):
-    """Pion : avance tout droit, capture en diagonale."""
+    """Pion : avance d'une case, deux au premier coup, capture en diagonale."""
 
-    def __init__(self, color, position):
+    def __init__(self, color: int, position):
+        """
+        :param color: 0 = blanc, 1 = noir
+        :param position: objet Position
+        """
         super().__init__(color, position)
-        self.has_moved = False  # Pour autoriser le coup de 2 cases au départ
+        self.has_moved = False  # True après le premier déplacement
 
     def __str__(self):
-        return "P"
+        return 'P'
 
     def isValidMove(self, newPosition, board):
-        # Direction : blanc monte (+1), noir descend (-1)
-        direction = 1 if self.color == 0 else -1
+        """Retourne True si le déplacement est valide pour un pion."""
+        from position import Position
+        col = self.position.column
+        row = self.position.row
+        direction = 1 if self.color == 0 else -1  # blanc monte, noir descend
 
-        diff_col = ord(newPosition.column) - ord(self.position.column)
-        diff_row = newPosition.row - self.position.row
+        # Avancer d'une case tout droit
+        if col == newPosition.column and newPosition.row == row + direction:
+            if board.getPiece(newPosition) is None:
+                return True
 
-        # Cas 1 : avancer d'une case tout droit (case vide)
-        if diff_col == 0 and diff_row == direction:
-            return board.getPiece(newPosition) is None
+        # Avancer de 2 cases au premier coup
+        startRow = 2 if self.color == 0 else 7
+        if (col == newPosition.column
+                and row == startRow
+                and not self.has_moved
+                and newPosition.row == row + 2 * direction):
+            middle = Position(col, row + direction)
+            if board.getPiece(middle) is None and board.getPiece(newPosition) is None:
+                return True
 
-        # Cas 2 : avancer de 2 cases au premier coup (les 2 cases vides)
-        if diff_col == 0 and diff_row == 2 * direction and not self.has_moved:
-            case_du_milieu = Position(self.position.column, self.position.row + direction)
-            return (board.getPiece(case_du_milieu) is None and
-                    board.getPiece(newPosition) is None)
+        # Capture en diagonale
+        cols = 'abcdefgh'
+        colIdx = cols.index(col)
+        diag_cols = []
+        if colIdx > 0:
+            diag_cols.append(cols[colIdx - 1])
+        if colIdx < 7:
+            diag_cols.append(cols[colIdx + 1])
 
-        # Cas 3 : capture en diagonale (1 case, ennemi présent)
-        if abs(diff_col) == 1 and diff_row == direction:
-            cible = board.getPiece(newPosition)
-            return cible is not None and cible.color != self.color
+        if newPosition.row == row + direction and newPosition.column in diag_cols:
+            target = board.getPiece(newPosition)
+            if target is not None and target.color != self.color:
+                return True
 
         return False
 
 
 if __name__ == "__main__":
+    from position import Position
     from board import Board
     b = Board()
-    pion = b.getPiece(Position('e', 2))
-    print(f"Pion en e2 : {pion}")
-    print("Avance e3 :", pion.isValidMove(Position('e', 3), b))   # True
-    print("Avance e4 :", pion.isValidMove(Position('e', 4), b))   # True
-    print("Recule e1 :", pion.isValidMove(Position('e', 1), b))   # False
+    pawn = b.getPiece(Position('e', 2))
+    print(f"Pion en e2 : {pawn}")
+    print(f"e2->e3 valide ? {pawn.isValidMove(Position('e', 3), b)}")   # True
+    print(f"e2->e4 valide ? {pawn.isValidMove(Position('e', 4), b)}")   # True
+    print(f"e2->e5 invalide ? {pawn.isValidMove(Position('e', 5), b)}") # False
     print("Tests Pawn OK !")
