@@ -191,6 +191,10 @@ class GameGUI:
                     if event.key == pygame.K_s:
                         self.sauvegarder()
                     elif event.key == pygame.K_l:
+                        elif event.key == pygame.K_r:
+                        self.__init__()
+                        self.choisir_mode_jeu()
+                        return
                         self.charger()
 
                 elif event.type == pygame.MOUSEBUTTONDOWN:
