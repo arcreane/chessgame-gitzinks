@@ -8,6 +8,8 @@ L'objectif est de recréer les règles officielles des échecs :
 - **Déplacements :** Chaque pièce calcule elle-même si son mouvement est mathématiquement valide (diagonales, lignes droites, etc.).
 - **Plateau :** Un dictionnaire gère en temps réel quelles cases sont occupées.
 - **Victoire :** (En cours de dev) Mettre le Roi adverse échec et mat via le moteur de jeu principal.
+##Trello
+https://trello.com/b/8LGGvhQd/chess
 
 ## Commandes
 
